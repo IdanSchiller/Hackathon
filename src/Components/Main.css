@@ -1,0 +1,20 @@
+.wrapper {
+    border: 1px solid black;
+    overflow: hidden;/* add this to contain floated children */
+  }
+  .slidersDiv{
+    display: inline-block;
+    width:80%;
+     margin: 0px auto;
+    float: right; /* add this */
+    background-color:white;
+  }
+  .formDiv {
+    width:20%;
+    height: 1000px;
+    margin:0px auto;
+    display: inline-block;
+    float: left;
+    background-color: #cccccc;
+  
+  }
