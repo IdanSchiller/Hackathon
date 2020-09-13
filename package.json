@@ -10,6 +10,7 @@
     "aws-cli": "0.0.2",
     "aws-sdk": "^2.751.0",
     "firebase": "^7.20.0",
+    "firestore": "^1.1.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebase": "^2.2.8",

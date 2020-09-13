@@ -1,8 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component,Suspense } from 'react'
 import fs from "fs"
 import sub1events from "./EventsData.json"
-import writeJsonFile  from 'write-json-file'
- 
+import {FirebaseAppProvider,useFirestore,useFirestoreCollectionData} from "reactfire";
+import firebaseConfig from "../FirebaseConfig"
+import addEvent from "./AsyncFuncs"
+import firestore from "firestore"
+import firebase from "firebase"
 
 
 export default class Form extends Component {
@@ -25,13 +28,27 @@ export default class Form extends Component {
         this.setState( {  })
     }
 
-    handleSubmmit(){
+    handleSubmmit(e){
+        const db = firebase.firestore();
+  db.settings({
+    timestampsInSnapshots: true
+  });
+  const userRef = db.collection("Events").add({
+    name:
+  });  
+
+
+        
     }
+    
 
     render() {
+
         return (
+            <FirebaseAppProvider firebaseConfig = {firebaseConfig}>
+
             <div>
-                <h1>Create New Event</h1>
+
                 <form  onSubmit={this.handleSubmmit}>
                 <input type="text" name="name"  style={{textAlign:"center"}} placeholder="Event Name" onChange={this.handleChange}/><br/>
                 <input type="text" name="date" style={{textAlign:"center"}} placeholder="Date" onChange={this.handleChange}/><br/>
@@ -43,6 +60,21 @@ export default class Form extends Component {
                 </form>
                 
             </div>
+            </FirebaseAppProvider>
+
         )
     }
 }
+
+function H1(){
+    const collection =useFirestore().collection('Events');
+    const events = useFirestoreCollectionData(collection,{idField: 'id'})
+    return (
+        <h1>Create New Event {events}</h1>
+    )
+}
+
+
+// <Suspense fallback={<div>loading...</div>}>
+// <H1/>
+// </Suspense>
