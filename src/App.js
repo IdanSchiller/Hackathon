@@ -15,6 +15,7 @@ import {useAuth, useUser, AuthCheck,FirebaseAppProvider} from "reactfire"
 
 
 function App() {
+
   return (
     <FirebaseAppProvider firebaseConfig = {firebaseConfig}>
     <Suspense fallback={<div>Loading...</div>}>
@@ -25,7 +26,7 @@ function App() {
 </element>
       <Router>
       <Switch>
-        <Route exact path="/" component={Main}/>
+        <Route exact path="/" component={() => <Main  />}/>
         <Route exact path="/showEvent" component={ShowEvent}/>
       </Switch>
       </Router>

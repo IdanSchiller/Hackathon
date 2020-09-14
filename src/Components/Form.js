@@ -1,25 +1,26 @@
 import React, { Component,Suspense } from 'react'
-import fs from "fs"
-import sub1events from "./EventsData.json"
 import {FirebaseAppProvider,useFirestore,useFirestoreCollectionData} from "reactfire";
 import firebaseConfig from "../FirebaseConfig"
-import addEvent from "./AsyncFuncs"
-import firestore from "firestore"
 import firebase from "firebase/app"
-import Firebase from 'firebase';
+import { v4 as uuidv4 ,stringify as uuidStringify,NIL as NIL_UUID} from 'uuid';
+import {useAuth, useUser, AuthCheck} from "reactfire"
+import appUser from "../FirebaseConfig"
 
 
 export default class Form extends Component {
     constructor(){
         super();
         this.state = {
+            id:NIL_UUID,
             name: "",
             date: "",
             start: 0,
             end: 0,
             online: false,
             place: null,
-            particNum: 0       
+            maxParticNum: 0,
+            particList:[],
+            creator:null     
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmmit = this.handleSubmmit.bind(this)
@@ -32,16 +33,29 @@ export default class Form extends Component {
         this.setState( { [name] : value })
         
     }
-    handleSubmmit(e){
+     handleSubmmit(e,appuser){
         e.preventDefault();
         const db = firebase.firestore();
           db.settings({timestampsInSnapshots: true});
 
-        db.collection("Events").add(this.state)        
+        var stateWithID = {...this.state}
+        const newID = uuidv4();
+        console.log(newID);
+        // stateWithID.id= uuidStringify(newID);
+
+        const myHookValue = this.props.myHookValue;
+        stateWithID.creator = myHookValue;
+        stateWithID.particList.push(this.props.appUser.displayName);
+        
+
+
+        db.collection("Events").add(stateWithID)        
     }
     
 
     render() {
+
+
 
         return (
             <FirebaseAppProvider firebaseConfig = {firebaseConfig}>
@@ -85,3 +99,18 @@ function H1(){
 // <Suspense fallback={<div>loading...</div>}>
 // <H1/>
 // </Suspense>
+
+export const ourUseUser = () => {
+    const { user } = useUser()
+    return user
+  }
+  
+
+function withMyHook(Component) {
+    return function WrappedComponent(props) {
+      const myHookValue = useUser();
+      return <Component {...props} myHookValue={myHookValue} />;
+    }
+  }
+
+  export function withMyHook(Form);

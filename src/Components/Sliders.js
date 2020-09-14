@@ -73,7 +73,7 @@ export default class Sliders extends Component {
                   <CardBody style={{ border: "1.5px solid black" }}>
                     <CardText>Place: {event.place}</CardText>
                     <CardText>Time: {event.start}:00-{event.end}:00</CardText>
-                    <Button>Join Event</Button>
+                    <a href={`/showEvent?id=${event.id}`}>View Event</a>
                   </CardBody>
                 </Card>
 
@@ -88,4 +88,9 @@ export default class Sliders extends Component {
 
 }
 
+
+export const useUser = () => {
+  const { user } = useUser()
+  return user
+}
 
