@@ -5,12 +5,13 @@ import {FirebaseAppProvider,useFirestore,useFirestoreCollectionData} from "react
 import firebaseConfig from "../FirebaseConfig"
 import addEvent from "./AsyncFuncs"
 import firestore from "firestore"
-import firebase from "firebase"
+import firebase from "firebase/app"
+import Firebase from 'firebase';
 
 
 export default class Form extends Component {
     constructor(){
-        super()
+        super();
         this.state = {
             name: "",
             date: "",
@@ -18,27 +19,25 @@ export default class Form extends Component {
             end: 0,
             online: false,
             place: null,
-            particNum: 0        
+            particNum: 0       
         }
         this.handleChange = this.handleChange.bind(this)
+        this.handleSubmmit = this.handleSubmmit.bind(this)
+
     }
 
     handleChange(event){
-        const {} = event.target;
-        this.setState( {  })
-    }
-
-    handleSubmmit(e){
-        const db = firebase.firestore();
-  db.settings({
-    timestampsInSnapshots: true
-  });
-  const userRef = db.collection("Events").add({
-    name:
-  });  
-
-
+    
+        const {name, value} = event.target;
+        this.setState( { [name] : value })
         
+    }
+    handleSubmmit(e){
+        e.preventDefault();
+        const db = firebase.firestore();
+          db.settings({timestampsInSnapshots: true});
+
+        db.collection("Events").add(this.state)        
     }
     
 
@@ -48,7 +47,7 @@ export default class Form extends Component {
             <FirebaseAppProvider firebaseConfig = {firebaseConfig}>
 
             <div>
-
+            <h1>Create New Event</h1>
                 <form  onSubmit={this.handleSubmmit}>
                 <input type="text" name="name"  style={{textAlign:"center"}} placeholder="Event Name" onChange={this.handleChange}/><br/>
                 <input type="text" name="date" style={{textAlign:"center"}} placeholder="Date" onChange={this.handleChange}/><br/>
@@ -56,6 +55,14 @@ export default class Form extends Component {
                 <input type="text" name="end" style={{textAlign:"center"}} placeholder="End Time" onChange={this.handleChange}/><br/>
                 <input type="text" name="place"style={{textAlign:"center"}}  placeholder="Place" onChange={this.handleChange}/><br/>
                 <input type="text" name="particNum"style={{textAlign:"center"}}  placeholder="Number of Participants " onChange={this.handleChange}/><br/>
+                <label for="courseName">Choose a Course:</label><br/>
+                <select type="text" id="courseName" name="courseName" style={{textAlign:"center"}}  placeholder="Course Name " onChange={this.handleChange}><br/>
+                  <option value="volvo">אלגברה</option>
+                  <option value="saab">חדווא</option>
+                  <option value="fiat">אינפי</option>
+                  <option value="audi">כלכלה</option>
+                </select><br/>
+                                
                 <button >Create New Event</button>  
                 </form>
                 
